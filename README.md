@@ -101,28 +101,32 @@ User types natural-language request
 | Specific numeric dosage ("250 mg", "2 tablets") | Soft warning — task still scheduled, vet reminder shown |
 
 ---
+## Design Decisions
 
-You are building **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
+PawPal+ SafeCare AI was designed as a layered system instead of a single large AI function. The workflow separates safety checking, knowledge retrieval, natural-language parsing, and deterministic scheduling into different modules. This makes the system easier to test, debug, and explain.
 
-## Scenario
+A local knowledge base was used instead of live internet retrieval. This keeps the project reproducible, avoids API-key requirements, and reduces the risk of retrieving unsafe or unreliable information. The trade-off is that the system can only use the curated pet-care guidance included in the repository.
 
-A busy pet owner needs help staying consistent with pet care. They want an assistant that can:
+The original PawPal+ scheduler was preserved rather than replaced. The AI layer converts natural-language input into structured tasks, but the final schedule is still produced by the tested deterministic scheduler. This keeps the system more reliable than allowing the AI layer to directly invent a schedule.
 
-- Track pet care tasks (walks, feeding, meds, enrichment, grooming, etc.)
-- Consider constraints (time available, priority, owner preferences)
-- Produce a daily plan and explain why it chose that plan
+## Testing Summary
 
-Your job is to design the system first (UML), then implement the logic in Python, then connect it to the Streamlit UI.
+The final system includes tests for the original PawPal+ scheduler and the new SafeCare AI modules. The original tests verify scheduling behavior such as task completion, task sorting, recurring tasks, conflict detection, filtering, and daily plan generation. The new tests cover guardrails, local knowledge retrieval, and natural-language task parsing.
 
-## What you will build
+The strongest part of the project is backend reliability. The scheduler and AI-support modules are tested separately, which makes failures easier to isolate. The main limitation is that the Streamlit UI is not deeply unit-tested, so the user-facing workflow was also checked manually through app screenshots and demo examples.
 
-Your final app should:
+This project showed that AI reliability improves when the system is decomposed into small, testable components. Guardrails, retrieval, parsing, and scheduling can each be evaluated independently instead of treating the full application as a black box.
 
-- Let a user enter basic owner + pet info
-- Let a user add/edit tasks (duration + priority at minimum)
-- Generate a daily schedule/plan based on constraints and priorities
-- Display the plan clearly (and ideally explain the reasoning)
-- Include tests for the most important scheduling behaviors
+## Reflection
+
+This project taught me that applied AI systems require more than generating answers. A useful system must also know when to warn the user, when to block unsafe requests, and when to rely on deterministic logic instead of flexible AI behavior.
+
+The most important design lesson was that safety should appear early in the workflow. By placing guardrails before retrieval and parsing, PawPal+ SafeCare AI avoids turning unsafe user requests into scheduled tasks.
+
+The project also showed the value of extending a working system instead of rebuilding from scratch. The original PawPal+ scheduler provided a stable backend, and the SafeCare AI layer made it more natural, explainable, and safety-aware.
+
+
+
 
 ## Getting started
 
@@ -149,15 +153,6 @@ python -m pytest tests/ -v
 The test suite covers the original PawPal+ scheduler **and** all three new
 Phase 1 modules (guardrails, knowledge base, AI parser).
 
-### Suggested workflow
-
-1. Read the scenario carefully and identify requirements and edge cases.
-2. Draft a UML diagram (classes, attributes, methods, relationships).
-3. Convert UML into Python class stubs (no logic yet).
-4. Implement scheduling logic in small increments.
-5. Add tests to verify key behaviors.
-6. Connect your logic to the Streamlit UI in `app.py`.
-7. Refine UML so it matches what you actually built.
 
 ## Smarter Scheduling
 
