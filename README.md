@@ -138,6 +138,92 @@ The most surprising part of reliability testing was that the safest design was n
 
 AI tools were used during the project for planning, debugging, test design, and implementation support. One helpful suggestion was to keep the original PawPal+ scheduler unchanged and add the AI functionality as a separate layer around it. This preserved the tested backend logic while still making the system more intelligent. One flawed suggestion was the earlier folder-structure assumption that treated the PawPal+ project as a nested repository. That would have made the final GitHub repo harder to clone and evaluate, so the structure was corrected before continuing.
 
+## Optional Stretch Features
+
+### 1. Evaluation Harness
+
+`evaluation_cases.json` and `evaluate_safecare.py` provide a reproducible reliability harness for the full pipeline.
+
+**11 test cases** cover safe requests, medication dosage warnings, toxic-food blocks, emergency symptom blocks, vet-bypass blocks, vague requests, species-specific retrieval, and multi-task parsing.
+
+Each case specifies:
+- `expected_safety_result` — `"safe"`, `"warning"`, or `"blocked"`
+- `expected_min_tasks` — minimum task count from the parser
+- `expected_keywords` — words that must appear in retrieved guidance or parsed task output
+
+**Run the evaluation:**
+
+```bash
+python evaluate_safecare.py
+```
+
+**Example output:**
+
+```
+========================================================================
+  PawPal+ SafeCare AI — Evaluation Harness
+========================================================================
+  [PASS] case_001     safety=ok  parser=ok  keywords=ok
+  [PASS] case_002     safety=ok  parser=ok  keywords=ok
+  [PASS] case_003     safety=ok  parser=ok  keywords=ok
+  ...
+========================================================================
+  Evaluation Summary
+========================================================================
+  Total cases              : 11
+  Passed                   : 11
+  Failed                   : 0
+  Overall accuracy         : 100.0%
+  Safety accuracy          : 100.0%
+  Parser accuracy          : 100.0%
+  Retrieval keyword acc.   : 100.0%
+========================================================================
+```
+
+---
+
+### 2. Agentic Workflow
+
+`agent_workflow.py` wraps the full AI pipeline in an observable multi-step workflow.
+
+**Entry point:**
+
+```python
+from agent_workflow import run_safecare_workflow
+result = run_safecare_workflow("Walk at 8am, feeding at 6pm", species="dog")
+```
+
+**Return dict keys:** `final_status`, `warnings`, `retrieved_guidance`, `parsed_tasks`, `steps`
+
+**Workflow steps (always visible in the Streamlit app):**
+
+| Step | What it checks |
+|---|---|
+| Inspect user request | Non-empty input, word count |
+| Run safety guardrails | Toxic substances, emergencies, dosages, vet-bypass |
+| Retrieve local pet-care guidance | Keyword + risk-aware local search |
+| Parse natural-language request into structured tasks | Regex + keyword extraction |
+| Validate parsed tasks | Task type and duration sanity check |
+| Prepare output for scheduler | Handoff to PawPal+ scheduler |
+
+In the app, click **"🔎 Agent workflow steps"** expander after analyzing a request to see each step's name, status icon, and message.
+
+---
+
+### 3. RAG Enhancement — Species-Aware and Risk-Aware Retrieval
+
+`knowledge_base.py` now applies a **risk-aware coherence boost** on top of keyword overlap scoring.
+
+**How it works:**
+- Seven semantic risk/topic clusters are defined (toxic substances, medication, emergency, feeding, exercise, grooming, enrichment).
+- If both the query and a knowledge entry share tokens from the same cluster, the entry receives a `+0.4` coherence bonus — surfacing more contextually relevant guidance even when raw keyword overlap is modest.
+- The boost is gated on `score > 0` so entries with zero keyword relevance are never promoted.
+- Species-specific entries are preferred over generic `"all"` entries when there is already keyword overlap (`+0.25`).
+
+This is entirely deterministic and offline — no embeddings or external services.
+
+---
+
 ## Reflection
 
 This project taught me that applied AI systems require more than generating answers. A useful system must also know when to warn the user, when to block unsafe requests, and when to rely on deterministic logic instead of flexible AI behavior.

@@ -1,11 +1,9 @@
 import streamlit as st
 from pawpal_system import Owner, Pet, Task, Scheduler, TaskStatus
 
-# --- Phase 1: SafeCare AI modules (graceful fallback if missing) ---
+# --- SafeCare AI modules (graceful fallback if missing) ---
 try:
-    from guardrails import check_safety
-    from knowledge_base import retrieve_guidance
-    from ai_parser import parse_request
+    from agent_workflow import run_safecare_workflow
     from safecare_logger import get_logger
     _AI_AVAILABLE = True
     _log = get_logger("app")
@@ -165,28 +163,28 @@ else:
                 "AI request submitted | pet='%s' species='%s' | input='%s'",
                 pet.name, pet.species, raw[:80],
             )
-            safety = check_safety(raw, pet_species=pet.species)
-            knowledge = retrieve_guidance(raw, species=pet.species) if not safety.blocked else []
-            tasks = parse_request(raw) if not safety.blocked else []
+            wf = run_safecare_workflow(raw, species=pet.species)
             st.session_state.ai_result = {
-                "safety": safety,
-                "knowledge": knowledge,
-                "tasks": tasks,
+                "final_status": wf["final_status"],
+                "warnings": wf["warnings"],
+                "knowledge": wf["retrieved_guidance"],
+                "tasks": wf["parsed_tasks"],
+                "steps": wf["steps"],
                 "pet_name": pet.name,
             }
 
     result = st.session_state.ai_result
     if result is not None and result.get("pet_name") == pet.name:
-        safety = result["safety"]
+        blocked = result["final_status"] == "blocked"
 
         # Safety warnings
-        for w in safety.warnings:
+        for w in result["warnings"]:
             if "SAFETY BLOCK" in w or "EMERGENCY" in w or "GUARDRAIL" in w:
                 st.error(w)
             else:
                 st.warning(w)
 
-        if safety.blocked:
+        if blocked:
             st.error(
                 "⛔ This request has been blocked by SafeCare guardrails. "
                 "Please revise your request or consult a veterinarian."
@@ -231,6 +229,17 @@ else:
                     "Try being more specific — include action words like "
                     "'walk', 'feed', 'medication', 'groom', or 'play'."
                 )
+
+        # Agent workflow steps expander (always shown after analysis)
+        steps = result.get("steps", [])
+        if steps:
+            _STATUS_ICON = {"ok": "✅", "warning": "⚠️", "blocked": "⛔", "skipped": "⏭️"}
+            with st.expander("🔎 Agent workflow steps"):
+                for s in steps:
+                    icon = _STATUS_ICON.get(s["status"], "•")
+                    st.markdown(
+                        f"{icon} **{s['step_name']}** — {s['message']}"
+                    )
 
 st.divider()
 

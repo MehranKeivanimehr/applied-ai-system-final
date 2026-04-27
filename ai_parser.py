@@ -69,6 +69,11 @@ _TASK_TYPE_KEYWORDS: list[tuple[str, list[str]]] = [
     ]),
 ]
 
+_DOSAGE_TASK_RE = re.compile(
+    r"\b\d+\s*(?:mg|ml|g)\b|\b\d+\s+(?:tablet|pill|capsule)s?\b",
+    re.IGNORECASE,
+)
+
 _DEFAULT_DURATIONS: dict[str, int] = {
     "medication": 5,
     "feeding": 15,
@@ -136,8 +141,18 @@ def _extract_duration(text: str) -> Optional[int]:
     return None
 
 
+def _has_task_keyword(text: str) -> bool:
+    lower = text.lower()
+    for _, keywords in _TASK_TYPE_KEYWORDS:
+        if any(kw in lower for kw in keywords):
+            return True
+    return bool(_DOSAGE_TASK_RE.search(text))
+
+
 def _detect_task_type(text: str) -> str:
     """Return the first matching task type or 'other'."""
+    if _DOSAGE_TASK_RE.search(text):
+        return "medication"
     lower = text.lower()
     for task_type, keywords in _TASK_TYPE_KEYWORDS:
         if any(kw in lower for kw in keywords):
@@ -170,12 +185,28 @@ def _build_title(segment: str, task_type: str) -> str:
     return title.capitalize() if title else task_type.capitalize()
 
 
+def _split_on_and(text: str) -> list[str]:
+    """Split on 'and' only where both sides have distinct task types."""
+    for m in re.finditer(r"\band\b", text, re.IGNORECASE):
+        left = text[:m.start()].strip()
+        right = text[m.end():].strip()
+        if (
+            _has_task_keyword(left)
+            and _has_task_keyword(right)
+            and _detect_task_type(left) != _detect_task_type(right)
+        ):
+            return [left] + _split_on_and(right)
+    return [text]
+
+
 def _split_segments(text: str) -> list[str]:
-    """Split a multi-task request into individual segments on commas/semicolons."""
-    # Normalise newlines to commas first
+    """Split a multi-task request into individual segments on commas/semicolons/and."""
     text = text.replace("\n", ", ").replace("\r", "")
     parts = re.split(r"[;,]", text)
-    return [p.strip() for p in parts if len(p.strip()) > 4]
+    result: list[str] = []
+    for part in parts:
+        result.extend(_split_on_and(part.strip()))
+    return [p.strip() for p in result if len(p.strip()) > 4]
 
 
 # ---------------------------------------------------------------------------
