@@ -184,7 +184,7 @@ python evaluate_safecare.py
 
 ### 2. Agentic Workflow
 
-`agent_workflow.py` wraps the full AI pipeline in an observable multi-step workflow.
+`agent_workflow.py` implements an **offline, deterministic agentic workflow** with explicit decision nodes. This is not a fully autonomous LLM agent; it is a structured pipeline where every significant choice is surfaced as a named decision step with a status and explanation, making the full reasoning chain visible to the user.
 
 **Entry point:**
 
@@ -193,20 +193,29 @@ from agent_workflow import run_safecare_workflow
 result = run_safecare_workflow("Walk at 8am, feeding at 6pm", species="dog")
 ```
 
-**Return dict keys:** `final_status`, `warnings`, `retrieved_guidance`, `parsed_tasks`, `steps`
+**Return dict keys:** `final_status`, `warnings`, `retrieved_guidance`, `parsed_tasks`, `steps`, `parser_confidence`
 
-**Workflow steps (always visible in the Streamlit app):**
+**Workflow steps and decision nodes:**
 
-| Step | What it checks |
-|---|---|
-| Inspect user request | Non-empty input, word count |
-| Run safety guardrails | Toxic substances, emergencies, dosages, vet-bypass |
-| Retrieve local pet-care guidance | Keyword + risk-aware local search |
-| Parse natural-language request into structured tasks | Regex + keyword extraction |
-| Validate parsed tasks | Task type and duration sanity check |
-| Prepare output for scheduler | Handoff to PawPal+ scheduler |
+| Step | Type | What it does |
+|---|---|---|
+| Inspect user request | Pipeline | Validates non-empty input, reports word count |
+| Run safety guardrails | Pipeline | Checks for toxic substances, emergencies, dosages, vet-bypass |
+| **Decision: Stop workflow** | **Decision node** | Appears only when guardrails block — makes the stopping choice explicit with a reason |
+| Retrieve local pet-care guidance | Pipeline | Keyword + risk-aware search over local knowledge base |
+| **Decision: Retry retrieval** | **Decision node** | Fires when first retrieval returns 0 results; retries with species-agnostic entries and reports the outcome |
+| Parse natural-language request into structured tasks | Pipeline | Regex + keyword extraction → Task objects |
+| Validate parsed tasks | Pipeline | Task type and duration sanity check |
+| **Decision: Parser confidence** | **Decision node** | Labels confidence as `high` (explicit times found), `medium` (tasks but no times), or `low` (no tasks extracted); included in the result dict as `parser_confidence` |
+| **Decision: Ready for scheduler** | **Decision node** | Final go/no-go for scheduling: `ok` when tasks exist and request is safe, `warning` when tasks exist but advisories apply or no tasks were found |
 
-In the app, click **"🔎 Agent workflow steps"** expander after analyzing a request to see each step's name, status icon, and message.
+**What makes this agentic:**
+- **Conditional branching** — blocked guardrails halt the pipeline at a visible decision node; the workflow does not continue to retrieval or parsing
+- **Retry behavior** — if species-specific retrieval finds nothing, a decision step fires and the system retries with broader matching, reporting both attempts
+- **Confidence scoring** — the parser self-assesses its output and communicates certainty to the user before they confirm adding tasks
+- **Explicit decision chain** — every decision node emits a step with a named reason, not a silent code branch
+
+In the app, click **"🔎 Agent workflow steps"** after analyzing a request to see each step's name, status icon (✅ / ⚠️ / ⛔), and explanation. Parser confidence (🟢 High / 🟡 Medium / 🔴 Low) also appears above the extracted tasks table.
 
 ---
 

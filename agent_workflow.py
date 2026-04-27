@@ -1,12 +1,10 @@
 """
-agent_workflow.py — Observable multi-step SafeCare AI workflow.
+agent_workflow.py — Observable multi-step SafeCare AI workflow with explicit
+decision nodes, retrieval retry, and parser confidence assessment.
 
-Exposes a single entry point, run_safecare_workflow(), that executes the
-full AI pipeline and returns a structured result including visible
-intermediate steps.  No hidden chain-of-thought; each step shows only
-its operational status and a short factual message.
-
-All computation is offline and deterministic — no external APIs required.
+Every meaningful choice in the pipeline is surfaced as a named "Decision:"
+step so the full reasoning chain is visible without requiring an LLM or any
+external API.  All computation is offline and deterministic.
 """
 from __future__ import annotations
 
@@ -17,13 +15,44 @@ from safecare_logger import get_logger
 
 logger = get_logger("agent_workflow")
 
-# Valid task types produced by ai_parser
 _VALID_TASK_TYPES = {"exercise", "feeding", "medication", "grooming", "enrichment", "vet", "other"}
 
 
 def _step(name: str, status: str, message: str) -> dict:
     """Return a workflow step record."""
     return {"step_name": name, "status": status, "message": message}
+
+
+def _compute_confidence(tasks: list) -> tuple[str, str, str]:
+    """Return (label, status, message) representing parser confidence.
+
+    high   — at least one task carries an explicit due_time extracted from the
+              user's text (strongest signal of a well-specified request).
+    medium — tasks were extracted but none have an explicit due_time; the
+              schedule is plausible but the user should confirm times.
+    low    — no tasks could be extracted; the parser found no recognisable
+              care-related keywords.
+    """
+    if not tasks:
+        return (
+            "low",
+            "warning",
+            "Low confidence — no tasks extracted. Try including action words "
+            "like 'walk', 'feed', 'medication', 'groom', or 'play'.",
+        )
+    if any(t.due_time is not None for t in tasks):
+        return (
+            "high",
+            "ok",
+            f"High confidence — {len(tasks)} task(s) extracted with explicit "
+            "scheduling information (due time present).",
+        )
+    return (
+        "medium",
+        "warning",
+        f"Medium confidence — {len(tasks)} task(s) extracted but no explicit "
+        "times were found. Review and confirm the schedule before adding.",
+    )
 
 
 def run_safecare_workflow(user_input: str, species: str = "dog") -> dict:
@@ -34,17 +63,18 @@ def run_safecare_workflow(user_input: str, species: str = "dog") -> dict:
     user_input : str
         Free-text pet-care request from the user.
     species : str
-        Pet species (e.g. 'dog', 'cat', 'rabbit').  Used by the guardrails
-        and retrieval modules for species-specific logic.
+        Pet species ('dog', 'cat', 'rabbit', …).  Passed to guardrails and
+        retrieval for species-specific logic.
 
     Returns
     -------
     dict with keys:
-        final_status      – 'safe' | 'warning' | 'blocked'
-        warnings          – list[str] of safety warning messages
+        final_status       – 'safe' | 'warning' | 'blocked'
+        warnings           – list[str] of safety warning messages
         retrieved_guidance – list[dict] of matched knowledge entries
-        parsed_tasks      – list[Task] produced by the parser
-        steps             – list[dict], each with step_name/status/message
+        parsed_tasks       – list[Task] produced by the parser
+        steps              – list[dict], each with step_name/status/message
+        parser_confidence  – 'high' | 'medium' | 'low'
     """
     steps: list[dict] = []
     logger.info(
@@ -67,6 +97,7 @@ def run_safecare_workflow(user_input: str, species: str = "dog") -> dict:
             "retrieved_guidance": [],
             "parsed_tasks": [],
             "steps": steps,
+            "parser_confidence": "low",
         }
 
     word_count = len(user_input.split())
@@ -85,15 +116,21 @@ def run_safecare_workflow(user_input: str, species: str = "dog") -> dict:
             "Run safety guardrails", "blocked",
             f"{len(safety.warnings)} safety issue(s) detected — request blocked.",
         ))
-        logger.warning(
-            "Workflow blocked at guardrails | issues=%d", len(safety.warnings)
-        )
+        # Decision node: make the stopping choice explicit and visible.
+        steps.append(_step(
+            "Decision: Stop workflow", "blocked",
+            "Guardrails detected unsafe content (toxic substance, emergency symptom, "
+            "or vet-bypass language). Workflow stopped to protect user and pet safety. "
+            "No retrieval, parsing, or scheduling will occur.",
+        ))
+        logger.warning("Workflow blocked at guardrails | issues=%d", len(safety.warnings))
         return {
             "final_status": "blocked",
             "warnings": safety.warnings,
             "retrieved_guidance": [],
             "parsed_tasks": [],
             "steps": steps,
+            "parser_confidence": "low",
         }
     elif safety.warnings:
         steps.append(_step(
@@ -112,8 +149,29 @@ def run_safecare_workflow(user_input: str, species: str = "dog") -> dict:
     guidance = retrieve_guidance(user_input, species=species)
     steps.append(_step(
         "Retrieve local pet-care guidance", "ok",
-        f"Retrieved {len(guidance)} relevant knowledge entry(s) from local base.",
+        f"Retrieved {len(guidance)} entry(s) for species='{species}'.",
     ))
+
+    # Decision node: if species-specific retrieval found nothing, retry
+    # with broader species-agnostic matching ('all' sentinel).
+    if not guidance:
+        steps.append(_step(
+            "Decision: Retry retrieval", "warning",
+            f"No guidance found for species='{species}'. "
+            "Retrying with species-agnostic entries to maximise coverage.",
+        ))
+        guidance = retrieve_guidance(user_input, species="all")
+        if guidance:
+            steps.append(_step(
+                "Retrieve local pet-care guidance (retry)", "ok",
+                f"Broader retrieval found {len(guidance)} general entry(s).",
+            ))
+        else:
+            steps.append(_step(
+                "Retrieve local pet-care guidance (retry)", "warning",
+                "No guidance entries matched even with broader search. "
+                "Proceeding without retrieval context.",
+            ))
 
     # ------------------------------------------------------------------
     # Step 4: Parse natural-language request into structured tasks
@@ -134,28 +192,38 @@ def run_safecare_workflow(user_input: str, species: str = "dog") -> dict:
             f"{len(invalid)} task(s) have unexpected attributes and were flagged.",
         ))
     else:
-        n = len(tasks)
-        msg = f"All {n} task(s) passed validation." if n > 0 else "No tasks to validate."
+        msg = (
+            f"All {len(tasks)} task(s) passed validation."
+            if tasks else "No tasks to validate."
+        )
         steps.append(_step("Validate parsed tasks", "ok", msg))
 
     # ------------------------------------------------------------------
-    # Step 6: Prepare output for scheduler
+    # Decision node: parser confidence assessment
+    # ------------------------------------------------------------------
+    confidence, conf_status, conf_msg = _compute_confidence(tasks)
+    steps.append(_step("Decision: Parser confidence", conf_status, conf_msg))
+
+    # ------------------------------------------------------------------
+    # Decision node: scheduler readiness
     # ------------------------------------------------------------------
     if tasks:
-        steps.append(_step(
-            "Prepare output for scheduler", "ok",
-            f"{len(tasks)} task(s) ready for the PawPal+ scheduler.",
-        ))
+        sched_status = "warning" if safety.warnings else "ok"
+        sched_msg = f"{len(tasks)} task(s) ready for the PawPal+ scheduler."
+        if safety.warnings:
+            sched_msg += " Advisory warnings apply — review before scheduling."
     else:
-        steps.append(_step(
-            "Prepare output for scheduler", "warning",
-            "No tasks were extracted — consider rephrasing the request.",
-        ))
+        sched_status = "warning"
+        sched_msg = (
+            "No tasks were extracted. Revise the request or add tasks manually "
+            "before scheduling."
+        )
+    steps.append(_step("Decision: Ready for scheduler", sched_status, sched_msg))
 
     final_status = "warning" if safety.warnings else "safe"
     logger.info(
-        "Workflow complete | final_status=%s | tasks=%d | guidance=%d",
-        final_status, len(tasks), len(guidance),
+        "Workflow complete | final_status=%s | tasks=%d | guidance=%d | confidence=%s",
+        final_status, len(tasks), len(guidance), confidence,
     )
     return {
         "final_status": final_status,
@@ -163,4 +231,5 @@ def run_safecare_workflow(user_input: str, species: str = "dog") -> dict:
         "retrieved_guidance": guidance,
         "parsed_tasks": tasks,
         "steps": steps,
+        "parser_confidence": confidence,
     }

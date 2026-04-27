@@ -171,6 +171,7 @@ else:
                 "tasks": wf["parsed_tasks"],
                 "steps": wf["steps"],
                 "pet_name": pet.name,
+                "parser_confidence": wf.get("parser_confidence", "medium"),
             }
 
     result = st.session_state.ai_result
@@ -199,9 +200,11 @@ else:
                         st.divider()
 
             # Parsed tasks preview
+            _CONF_BADGE = {"high": "🟢 High", "medium": "🟡 Medium", "low": "🔴 Low"}
             tasks = result["tasks"]
             if tasks:
-                st.markdown("**Extracted tasks — review before adding:**")
+                conf_label = _CONF_BADGE.get(result.get("parser_confidence", "medium"), "")
+                st.markdown(f"**Extracted tasks — review before adding:** &nbsp; Parser confidence: {conf_label}")
                 st.table([
                     {
                         "Title": t.title,
