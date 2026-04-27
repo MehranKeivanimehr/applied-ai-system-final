@@ -1,0 +1,225 @@
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk for 30 minutes at 8am'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feed at 6pm'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='morning walk at 8am for 30 minutes'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feeding at 6pm'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='heart medication at 9am'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk at 8am'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk for 45 minutes'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='daily grooming session'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='morning walk at 8am'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='medication at 9am'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk at 8am'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feeding at 6pm'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='grooming session'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 3 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm, medication at 9am'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk for 30 minutes; grooming session for 20 minutes'
+2026-04-26 22:33:07 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am
+feeding at 6pm'
+2026-04-26 22:33:07 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='My dog needs a 30-minute walk at 8am and feeding at 6pm.'
+2026-04-26 22:33:07 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='Morning walk for 30 minutes, then grooming session.'
+2026-04-26 22:33:07 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='Feed the cat twice daily.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Give the dog some chocolate as a treat.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Feed Max grapes after his walk.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='I used xylitol gum to hide the pill.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Give aspirin for joint pain.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='Put some lilies near the cat bed.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='Apply permethrin flea treatment to the cat.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=rabbit | issues=1 | input_snippet='Give the rabbit chocolate.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='My dog is seizing on the floor.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='The cat is not breathing properly.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='My dog collapsed after the walk.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='The dog has blue gums and is unresponsive.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Give 250 mg of the antibiotic twice daily.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Heart medication: 1 tablet every morning at 9am.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Give 5 ml of the liquid medication after meals.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Use honey instead of the vet for the wound.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='We want to avoid the vet and handle this at home.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='I don't need a vet, just schedule the treatments.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='Give chocolate and grapes to the dog.'
+2026-04-26 22:33:07 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='Dog is seizing — give 500 mg of phenobarbital.'
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=3 / eligible=10
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='walk feed medication groom play vet' | species=dog | matched=3 / eligible=14
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='walk feed medication groom play vet' | species=dog | matched=2 / eligible=14
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='morning walk exercise' | species=dog | matched=3 / eligible=11
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='feeding meal schedule' | species=dog | matched=3 / eligible=11
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='medication pill dose' | species=dog | matched=5 / eligible=11
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='xyzzy quantum flux nonsense zzzzz' | species=dog | matched=3 / eligible=10
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='litter box bathroom' | species=dog | matched=3 / eligible=10
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='heat pavement heatstroke' | species=cat | matched=3 / eligible=6
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='water drinking hydration' | species=dog | matched=3 / eligible=11
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='water drinking hydration' | species=cat | matched=3 / eligible=7
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=3 / eligible=10
+2026-04-26 22:33:07 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:07 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=3 / eligible=10
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk for 30 minutes at 8am'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feed at 6pm'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='morning walk at 8am for 30 minutes'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feeding at 6pm'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='heart medication at 9am'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk at 8am'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk for 45 minutes'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='daily grooming session'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='morning walk at 8am'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='medication at 9am'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk at 8am'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feeding at 6pm'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='grooming session'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 3 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm, medication at 9am'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk for 30 minutes; grooming session for 20 minutes'
+2026-04-26 22:33:56 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am
+feeding at 6pm'
+2026-04-26 22:33:56 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='My dog needs a 30-minute walk at 8am and feeding at 6pm.'
+2026-04-26 22:33:56 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='Morning walk for 30 minutes, then grooming session.'
+2026-04-26 22:33:56 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='Feed the cat twice daily.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Give the dog some chocolate as a treat.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Feed Max grapes after his walk.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='I used xylitol gum to hide the pill.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Give aspirin for joint pain.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='Put some lilies near the cat bed.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='Apply permethrin flea treatment to the cat.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=rabbit | issues=1 | input_snippet='Give the rabbit chocolate.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='My dog is seizing on the floor.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='The cat is not breathing properly.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='My dog collapsed after the walk.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='The dog has blue gums and is unresponsive.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Give 250 mg of the antibiotic twice daily.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Heart medication: 1 tablet every morning at 9am.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Give 5 ml of the liquid medication after meals.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Use honey instead of the vet for the wound.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='We want to avoid the vet and handle this at home.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='I don't need a vet, just schedule the treatments.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='Give chocolate and grapes to the dog.'
+2026-04-26 22:33:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='Dog is seizing — give 500 mg of phenobarbital.'
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=1 / eligible=1
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='walk feed medication groom play vet' | species=dog | matched=3 / eligible=9
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='walk feed medication groom play vet' | species=dog | matched=2 / eligible=9
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='morning walk exercise' | species=dog | matched=2 / eligible=2
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='feeding meal schedule' | species=dog | matched=2 / eligible=2
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='medication pill dose' | species=dog | matched=2 / eligible=2
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='xyzzy quantum flux nonsense zzzzz' | species=dog | matched=0 / eligible=0
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='litter box bathroom' | species=dog | matched=0 / eligible=0
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='heat pavement heatstroke' | species=cat | matched=0 / eligible=0
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='water drinking hydration' | species=dog | matched=1 / eligible=1
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='water drinking hydration' | species=cat | matched=1 / eligible=1
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=1 / eligible=1
+2026-04-26 22:33:56 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:33:56 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=1 / eligible=1
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk for 30 minutes at 8am'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feed at 6pm'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='morning walk at 8am for 30 minutes'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feeding at 6pm'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='heart medication at 9am'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk at 8am'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk for 45 minutes'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='daily grooming session'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='morning walk at 8am'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='medication at 9am'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='walk at 8am'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='feeding at 6pm'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 1 task(s) from input (demo mode) | snippet='grooming session'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 3 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm, medication at 9am'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am, feeding at 6pm'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk for 30 minutes; grooming session for 20 minutes'
+2026-04-26 22:37:30 [INFO] ai_parser: Parsed 2 task(s) from input (demo mode) | snippet='walk at 8am
+feeding at 6pm'
+2026-04-26 22:37:30 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='My dog needs a 30-minute walk at 8am and feeding at 6pm.'
+2026-04-26 22:37:30 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='Morning walk for 30 minutes, then grooming session.'
+2026-04-26 22:37:30 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='Feed the cat twice daily.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Give the dog some chocolate as a treat.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Feed Max grapes after his walk.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='I used xylitol gum to hide the pill.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Give aspirin for joint pain.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='Put some lilies near the cat bed.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='Apply permethrin flea treatment to the cat.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=rabbit | issues=1 | input_snippet='Give the rabbit chocolate.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='My dog is seizing on the floor.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='The cat is not breathing properly.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='My dog collapsed after the walk.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='The dog has blue gums and is unresponsive.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Give 250 mg of the antibiotic twice daily.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Heart medication: 1 tablet every morning at 9am.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=False | pet_species=dog | issues=1 | input_snippet='Give 5 ml of the liquid medication after meals.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='Use honey instead of the vet for the wound.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=cat | issues=1 | input_snippet='We want to avoid the vet and handle this at home.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=1 | input_snippet='I don't need a vet, just schedule the treatments.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='Give chocolate and grapes to the dog.'
+2026-04-26 22:37:30 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='Dog is seizing — give 500 mg of phenobarbital.'
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=1 / eligible=1
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='walk feed medication groom play vet' | species=dog | matched=3 / eligible=9
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='walk feed medication groom play vet' | species=dog | matched=2 / eligible=9
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='morning walk exercise' | species=dog | matched=2 / eligible=2
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='feeding meal schedule' | species=dog | matched=2 / eligible=2
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='medication pill dose' | species=dog | matched=2 / eligible=2
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='xyzzy quantum flux nonsense zzzzz' | species=dog | matched=0 / eligible=0
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='litter box bathroom' | species=dog | matched=0 / eligible=0
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='heat pavement heatstroke' | species=cat | matched=0 / eligible=0
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='water drinking hydration' | species=dog | matched=1 / eligible=1
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='water drinking hydration' | species=cat | matched=1 / eligible=1
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=1 / eligible=1
+2026-04-26 22:37:30 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:37:30 [INFO] knowledge_base: Retrieval | query='walk exercise' | species=dog | matched=1 / eligible=1
+2026-04-26 22:43:09 [INFO] app: AI request submitted | pet='Max' species='dog' | input='My dog Max needs a morning walk for 30 minutes, breakfast at 8:00 AM, and playti'
+2026-04-26 22:43:09 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='My dog Max needs a morning walk for 30 minutes, breakfast at'
+2026-04-26 22:43:09 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:43:09 [INFO] knowledge_base: Retrieval | query='My dog Max needs a morning walk for 30 minutes, br' | species=dog | matched=3 / eligible=10
+2026-04-26 22:43:09 [INFO] ai_parser: Parsed 3 task(s) from input (demo mode) | snippet='My dog Max needs a morning walk for 30 minutes, breakfast at'
+2026-04-26 22:43:47 [INFO] app: Added 3 AI-parsed tasks to pet 'Max'
+2026-04-26 22:43:56 [INFO] app: AI request submitted | pet='Max' species='dog' | input='Give Max chocolate as a reward and 2 aspirin tablets tonight.'
+2026-04-26 22:43:56 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='Give Max chocolate as a reward and 2 aspirin tablets tonight'
+2026-04-26 22:54:38 [INFO] app: AI request submitted | pet='Max' species='dog' | input='My dog Max needs a morning walk for 30 minutes, breakfast at 8:00 AM, and playti'
+2026-04-26 22:54:38 [INFO] guardrails: Safety check passed | pet_species=dog | input_snippet='My dog Max needs a morning walk for 30 minutes, breakfast at'
+2026-04-26 22:54:38 [INFO] knowledge_base: Knowledge base loaded: 25 entries
+2026-04-26 22:54:38 [INFO] knowledge_base: Retrieval | query='My dog Max needs a morning walk for 30 minutes, br' | species=dog | matched=3 / eligible=10
+2026-04-26 22:54:38 [INFO] ai_parser: Parsed 3 task(s) from input (demo mode) | snippet='My dog Max needs a morning walk for 30 minutes, breakfast at'
+2026-04-26 22:57:25 [INFO] app: AI request submitted | pet='Max' species='dog' | input='Give Max chocolate as a reward and 2 aspirin tablets tonight.'
+2026-04-26 22:57:25 [WARNING] guardrails: Safety check triggered | blocked=True | pet_species=dog | issues=2 | input_snippet='Give Max chocolate as a reward and 2 aspirin tablets tonight'

@@ -1,0 +1,177 @@
+[
+  {
+    "id": "dog_exercise_1",
+    "species": ["dog"],
+    "keywords": ["walk", "walks", "walking", "run", "runs", "exercise", "outdoor", "activity", "jog", "hike"],
+    "title": "Dog Exercise Guidelines",
+    "guidance": "Adult dogs typically need 30–60 minutes of exercise per day, split into at least two sessions. Puppies under 6 months should have short 5–10 minute sessions to protect developing joints. Senior dogs benefit from gentle, shorter walks. Avoid vigorous exercise in hot or humid weather — exercise early morning or evening instead."
+  },
+  {
+    "id": "dog_feeding_1",
+    "species": ["dog"],
+    "keywords": ["feed", "feeding", "meal", "meals", "food", "eat", "dinner", "breakfast", "kibble", "diet"],
+    "title": "Dog Feeding Schedule",
+    "guidance": "Adult dogs do best with two meals per day, spaced 8–12 hours apart (e.g., 7am and 6pm). Puppies under 6 months need 3–4 smaller meals daily. Avoid feeding immediately before or after exercise to reduce the risk of bloat. Always provide fresh water alongside every meal."
+  },
+  {
+    "id": "cat_feeding_1",
+    "species": ["cat"],
+    "keywords": ["feed", "feeding", "meal", "meals", "food", "eat", "dinner", "breakfast", "kibble", "wet food"],
+    "title": "Cat Feeding Schedule",
+    "guidance": "Cats can be fed twice daily (morning and evening) with measured portions to prevent obesity. Wet food supports hydration, which is important because cats have a naturally low thirst drive. Avoid leaving dry food out all day as it encourages overeating. Fresh water should always be available — many cats prefer a water fountain."
+  },
+  {
+    "id": "dog_cat_medication_1",
+    "species": ["dog", "cat"],
+    "keywords": ["medication", "medicine", "med", "meds", "pill", "pills", "tablet", "tablets", "capsule", "dose", "prescription", "treatment"],
+    "title": "Medication Scheduling Best Practices",
+    "guidance": "Always give medication at the same time(s) each day to maintain consistent blood levels. Use pill pockets, soft treats, or a small amount of food to make administration easier. Never crush time-release capsules or tablets without consulting your vet. If your pet vomits within 15 minutes of taking medication, contact your vet before re-dosing. Store all medications out of reach of children and pets."
+  },
+  {
+    "id": "general_medication_safety",
+    "species": ["all"],
+    "keywords": ["medication", "medicine", "dose", "dosage", "drug", "prescription", "over the counter", "supplement", "vitamin"],
+    "title": "Medication Safety — Always Consult Your Vet",
+    "guidance": "NEVER give human medications to pets without explicit veterinary approval. Many common human drugs (aspirin, ibuprofen, acetaminophen, naproxen) are toxic or fatal to dogs and cats even in small doses. Always confirm dosage, frequency, and duration of any medication with your licensed veterinarian. PawPal+ can schedule reminders but cannot recommend dosages."
+  },
+  {
+    "id": "dog_grooming_1",
+    "species": ["dog"],
+    "keywords": ["groom", "grooming", "brush", "brushing", "bath", "bathe", "nail", "nails", "trim", "clip", "coat", "fur"],
+    "title": "Dog Grooming Routine",
+    "guidance": "Most dogs benefit from brushing 2–3 times per week; long-coated breeds may need daily brushing to prevent matting. Bathing frequency varies by coat type — typically every 4–8 weeks. Nail trimming every 3–4 weeks prevents overgrowth and joint stress. Check and clean ears weekly for wax buildup or redness. Start grooming routines early in puppyhood so your dog becomes comfortable with handling."
+  },
+  {
+    "id": "cat_grooming_1",
+    "species": ["cat"],
+    "keywords": ["groom", "grooming", "brush", "brushing", "bath", "nail", "nails", "trim", "clip", "fur", "coat", "shedding"],
+    "title": "Cat Grooming Routine",
+    "guidance": "Short-haired cats typically groom themselves adequately, but benefit from weekly brushing to reduce shedding and hairballs. Long-haired cats need daily brushing. Cats rarely need baths unless they get into something harmful. Trim nails every 2–3 weeks. Introduce brushing gradually using treats to build a positive association."
+  },
+  {
+    "id": "dog_dental_1",
+    "species": ["dog"],
+    "keywords": ["teeth", "dental", "brush teeth", "toothbrush", "toothpaste", "dental chew", "breath", "gum"],
+    "title": "Dog Dental Care",
+    "guidance": "Brush your dog's teeth daily using pet-specific toothpaste (never human toothpaste — it contains xylitol which is toxic to dogs). If daily brushing is not possible, aim for 3 times per week. Dental chews approved by the Veterinary Oral Health Council (VOHC) can supplement brushing. Schedule professional dental cleanings with your vet annually or as recommended."
+  },
+  {
+    "id": "cat_enrichment_1",
+    "species": ["cat"],
+    "keywords": ["play", "playing", "toy", "toys", "enrich", "enrichment", "indoor", "stimulation", "boredom", "hunt"],
+    "title": "Cat Indoor Enrichment",
+    "guidance": "Indoor cats need at least 2–3 interactive play sessions per day (10–15 minutes each) to satisfy hunting instincts and prevent boredom-related behaviors. Rotate toys to maintain novelty — wand toys, puzzle feeders, and crinkle balls are popular choices. Vertical space (cat trees, shelves) and window perches also provide important mental stimulation. Scheduled play before meals mimics the hunt-catch-eat sequence cats naturally follow."
+  },
+  {
+    "id": "dog_enrichment_1",
+    "species": ["dog"],
+    "keywords": ["play", "playing", "toy", "toys", "enrich", "enrichment", "puzzle", "boredom", "stimulation", "fetch", "training"],
+    "title": "Dog Mental Enrichment",
+    "guidance": "Mental stimulation is as important as physical exercise for dogs. Provide puzzle feeders, sniff mats, and training sessions (5–10 minutes, 2–3 times daily) to tire out an active mind. Rotate toys weekly. Teaching new commands or tricks is excellent enrichment and strengthens your bond. A mentally stimulated dog is far less likely to develop destructive behaviors."
+  },
+  {
+    "id": "general_water_1",
+    "species": ["all"],
+    "keywords": ["water", "hydration", "drink", "drinking", "thirst", "bowl", "fountain"],
+    "title": "Fresh Water Requirements",
+    "guidance": "All pets should have access to clean, fresh water at all times. Dogs need approximately 1 ounce of water per pound of body weight per day. Cats are prone to under-drinking — a running water fountain can significantly increase their intake. Change water bowls daily and wash them with soap and water every 2–3 days to prevent bacterial growth. Dehydration can quickly become dangerous, especially in hot weather or after exercise."
+  },
+  {
+    "id": "general_emergency_1",
+    "species": ["all"],
+    "keywords": ["emergency", "sick", "vomit", "vomiting", "diarrhea", "lethargic", "lethargy", "not eating", "refuse food", "pale"],
+    "title": "When to Contact a Vet Immediately",
+    "guidance": "Contact your veterinarian immediately if your pet shows any of these signs: repeated vomiting or diarrhea (more than 2 episodes), blood in urine or stool, sudden lethargy or weakness, refusal to eat for more than 24 hours, difficulty breathing, seizures, collapse, or suspected ingestion of a toxic substance. When in doubt, call your vet — early intervention is always better than waiting."
+  },
+  {
+    "id": "general_vet_visits_1",
+    "species": ["all"],
+    "keywords": ["vet", "veterinarian", "checkup", "check-up", "appointment", "annual", "exam", "wellness"],
+    "title": "Routine Veterinary Care",
+    "guidance": "Healthy adult pets should see a veterinarian at least once a year for a wellness exam, vaccinations, and parasite prevention. Senior pets (7+ years for dogs, 10+ for cats) should have twice-yearly checkups. Keep a record of all vaccines, medications, and health events. Establishing a relationship with a regular vet means faster, more informed care if an emergency arises."
+  },
+  {
+    "id": "dog_heat_safety_1",
+    "species": ["dog"],
+    "keywords": ["heat", "hot", "summer", "temperature", "sun", "pavement", "humidity", "heatstroke", "cool"],
+    "title": "Dog Heat Safety",
+    "guidance": "Dogs can overheat quickly — exercise early morning or after sunset on hot days. Avoid hot pavement (if it's too hot for your hand after 5 seconds, it's too hot for paw pads). Brachycephalic breeds (pugs, bulldogs, French bulldogs) are especially heat-sensitive and should be kept cool and indoors on hot days. Signs of heatstroke include heavy panting, drooling, weakness, and vomiting — this is a medical emergency requiring immediate vet care."
+  },
+  {
+    "id": "rabbit_care_1",
+    "species": ["rabbit"],
+    "keywords": ["rabbit", "bunny", "hay", "pellet", "grass", "feed", "feeding", "food", "diet", "vegetable"],
+    "title": "Rabbit Diet and Care",
+    "guidance": "Rabbits should have unlimited access to fresh timothy hay, which should make up 80% of their diet — it is essential for dental health and gut motility. Fresh leafy greens (romaine, kale, parsley) can be offered daily. Pellets should be limited to 1/4 cup per 5 lbs of body weight per day. Avoid sugary fruits, starchy vegetables, and iceberg lettuce. Fresh water must always be available. Rabbits are sensitive to temperature extremes and should be kept between 60–70°F."
+  },
+  {
+    "id": "dog_puppy_care_1",
+    "species": ["dog"],
+    "keywords": ["puppy", "young", "baby", "new", "training", "socialize", "socialization", "age", "months"],
+    "title": "Puppy Care Essentials",
+    "guidance": "Puppies need 3–4 small meals per day until 6 months old. The critical socialization window is 3–14 weeks — expose puppies to varied people, sounds, and environments during this time. Begin crate training and basic commands (sit, stay, come) from day one using positive reinforcement. Puppies need more sleep than adult dogs — up to 18–20 hours per day is normal. Limit vigorous exercise to protect developing joints."
+  },
+  {
+    "id": "general_senior_care_1",
+    "species": ["all"],
+    "keywords": ["senior", "old", "older", "aging", "age", "elderly", "arthritis", "joint", "stiff"],
+    "title": "Senior Pet Care",
+    "guidance": "Senior pets (7+ years for dogs, 10+ for cats) often benefit from more frequent, shorter exercise sessions rather than long intense ones. Watch for signs of arthritis: reluctance to jump, stiffness after rest, or slowing on walks. Switch to a senior-formula diet as recommended by your vet. Schedule bi-annual vet checkups to catch age-related conditions early. Provide ramps or steps to help seniors access furniture or vehicles without stressing joints."
+  },
+  {
+    "id": "general_flea_tick_1",
+    "species": ["all"],
+    "keywords": ["flea", "fleas", "tick", "ticks", "parasite", "prevention", "treatment", "heartworm", "worm"],
+    "title": "Parasite Prevention",
+    "guidance": "Year-round flea, tick, and heartworm prevention is recommended in most climates. Use only products labeled specifically for your pet's species — dog flea products containing permethrin are highly toxic to cats. Monthly topical treatments, oral medications, or collars are all effective options; discuss the best choice for your pet with your vet. Check for ticks after every outdoor excursion in wooded or grassy areas."
+  },
+  {
+    "id": "cat_litter_1",
+    "species": ["cat"],
+    "keywords": ["litter", "litter box", "bathroom", "toilet", "clean", "scoop", "waste"],
+    "title": "Litter Box Guidelines",
+    "guidance": "Provide one litter box per cat, plus one extra. Scoop daily and do a full litter change weekly. Place boxes in quiet, low-traffic areas away from food and water bowls. Use an unscented, clumping litter — most cats dislike strong fragrances. If your cat suddenly stops using the litter box, schedule a vet visit as this can indicate a urinary tract infection or other medical issue."
+  },
+  {
+    "id": "general_night_routine_1",
+    "species": ["all"],
+    "keywords": ["night", "evening", "sleep", "bedtime", "routine", "settle", "calm", "rest"],
+    "title": "Evening Routine Tips",
+    "guidance": "A consistent evening routine helps pets wind down and reduces anxiety. For dogs, a short walk or calm play session 1–2 hours before bed helps them settle. Avoid feeding right before bedtime to prevent digestive issues. Ensure your pet has a comfortable, designated sleeping area that is quiet and at a consistent temperature. Cats are naturally crepuscular (active at dawn and dusk), so evening play can redirect nighttime activity."
+  },
+  {
+    "id": "general_morning_routine_1",
+    "species": ["all"],
+    "keywords": ["morning", "breakfast", "wake", "early", "start", "daily"],
+    "title": "Morning Routine Tips",
+    "guidance": "Morning is an excellent time for exercise and feeding since most pets are rested and energetic. For dogs, a morning walk before breakfast can reinforce good behavior and use pent-up energy. Always wait at least 30 minutes after feeding before vigorous exercise to reduce bloat risk. A consistent morning schedule — same wake time, same feeding time, same walk time — reduces anxiety and strengthens your pet's internal clock."
+  },
+  {
+    "id": "dog_separation_1",
+    "species": ["dog"],
+    "keywords": ["alone", "anxiety", "separation", "left", "home alone", "lonely", "destructive", "bark"],
+    "title": "Managing Dog Separation Anxiety",
+    "guidance": "Dogs left alone for extended periods can develop separation anxiety. Aim to break long alone periods with a midday walk or doggy daycare. Puzzle feeders and chew toys can occupy dogs for 30–60 minutes. Practice short departures to desensitize your dog. If destructive behavior or excessive barking persists, consult your vet — separation anxiety is a medical condition that responds well to behavioral therapy and, when severe, medication."
+  },
+  {
+    "id": "general_vaccination_1",
+    "species": ["all"],
+    "keywords": ["vaccine", "vaccination", "shot", "booster", "immunization", "rabies", "distemper", "parvo"],
+    "title": "Vaccination Schedule Overview",
+    "guidance": "Core vaccines for dogs include rabies, distemper, parvovirus, and hepatitis. Core vaccines for cats include rabies, feline herpesvirus, calicivirus, and panleukopenia. Puppies and kittens typically need a series of vaccines starting at 6–8 weeks, then boosters every 3–4 weeks until 16 weeks old. Adult pets need boosters every 1–3 years depending on the vaccine and local laws. Keep a written vaccination record."
+  },
+  {
+    "id": "dog_cat_dental_chew_1",
+    "species": ["dog", "cat"],
+    "keywords": ["dental chew", "chew", "bone", "teeth", "dental treat", "rawhide", "tartar"],
+    "title": "Dental Chews and Chew Safety",
+    "guidance": "Dental chews can help reduce tartar buildup between brushings. Choose products with the VOHC (Veterinary Oral Health Council) seal of approval. Avoid very hard chews like real bones, antlers, or hooves — they can fracture teeth. Rawhide can cause intestinal blockages; consider safer alternatives like bully sticks or veterinary-approved dental chews. Always supervise your pet during chew sessions."
+  },
+  {
+    "id": "general_toxic_foods_warning",
+    "species": ["all"],
+    "keywords": ["toxic", "dangerous", "harmful", "poison", "safe", "feed", "food", "treat"],
+    "title": "Common Toxic Foods to Avoid",
+    "guidance": "Many human foods are dangerous to pets. For dogs: chocolate, xylitol (in sugar-free gum/candy), grapes, raisins, onions, garlic, macadamia nuts, alcohol, and caffeine are toxic. For cats: lilies (all parts are deadly), onions, garlic, xylitol, alcohol, and dog flea products containing permethrin. For rabbits: avocado, onions, garlic, rhubarb, and most starchy vegetables. When in doubt about a food, consult your vet before offering it."
+  }
+]

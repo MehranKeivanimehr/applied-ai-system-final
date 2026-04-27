@@ -1,6 +1,17 @@
 import streamlit as st
 from pawpal_system import Owner, Pet, Task, Scheduler, TaskStatus
 
+# --- Phase 1: SafeCare AI modules (graceful fallback if missing) ---
+try:
+    from guardrails import check_safety
+    from knowledge_base import retrieve_guidance
+    from ai_parser import parse_request
+    from safecare_logger import get_logger
+    _AI_AVAILABLE = True
+    _log = get_logger("app")
+except ImportError as _err:
+    _AI_AVAILABLE = False
+
 DATA_FILE = "data.json"
 
 # --- Session State Init: load from file or create fresh ---
@@ -10,6 +21,9 @@ if "owner" not in st.session_state:
 
 if "active_pet" not in st.session_state:
     st.session_state.active_pet = None
+
+if "ai_result" not in st.session_state:
+    st.session_state.ai_result = None
 
 
 def save() -> None:
@@ -112,6 +126,111 @@ else:
             }
             for t in current_tasks
         ])
+
+st.divider()
+
+# --- Section AI: SafeCare AI Request (Phase 1) ---
+st.subheader("🤖 SafeCare AI Request")
+
+if not _AI_AVAILABLE:
+    st.warning(
+        "AI modules not found. Ensure guardrails.py, knowledge_base.py, "
+        "ai_parser.py, and safecare_logger.py are in the project root."
+    )
+elif st.session_state.active_pet is None:
+    st.info("Add and select a pet above before using the AI request feature.")
+else:
+    pet = st.session_state.active_pet
+    st.caption(
+        f"Describe care needs for **{pet.name}** in plain English. "
+        "The system will extract tasks, retrieve relevant guidance, and check for safety."
+    )
+
+    ai_input = st.text_area(
+        "Describe care needs",
+        placeholder=(
+            "e.g. 'Max needs a morning walk at 8am for 30 minutes, "
+            "evening feeding at 6pm, and heart medication at 9am and 9pm'"
+        ),
+        height=110,
+        key="ai_input_field",
+    )
+
+    if st.button("🔍 Analyze Request"):
+        raw = ai_input.strip()
+        if not raw:
+            st.warning("Please enter a care request before analyzing.")
+        else:
+            _log.info(
+                "AI request submitted | pet='%s' species='%s' | input='%s'",
+                pet.name, pet.species, raw[:80],
+            )
+            safety = check_safety(raw, pet_species=pet.species)
+            knowledge = retrieve_guidance(raw, species=pet.species) if not safety.blocked else []
+            tasks = parse_request(raw) if not safety.blocked else []
+            st.session_state.ai_result = {
+                "safety": safety,
+                "knowledge": knowledge,
+                "tasks": tasks,
+                "pet_name": pet.name,
+            }
+
+    result = st.session_state.ai_result
+    if result is not None and result.get("pet_name") == pet.name:
+        safety = result["safety"]
+
+        # Safety warnings
+        for w in safety.warnings:
+            if "SAFETY BLOCK" in w or "EMERGENCY" in w or "GUARDRAIL" in w:
+                st.error(w)
+            else:
+                st.warning(w)
+
+        if safety.blocked:
+            st.error(
+                "⛔ This request has been blocked by SafeCare guardrails. "
+                "Please revise your request or consult a veterinarian."
+            )
+        else:
+            # Knowledge snippets
+            if result["knowledge"]:
+                with st.expander("📚 Relevant Pet Care Guidance (click to expand)"):
+                    for entry in result["knowledge"]:
+                        st.markdown(f"**{entry['title']}**")
+                        st.markdown(entry["guidance"])
+                        st.divider()
+
+            # Parsed tasks preview
+            tasks = result["tasks"]
+            if tasks:
+                st.markdown("**Extracted tasks — review before adding:**")
+                st.table([
+                    {
+                        "Title": t.title,
+                        "Type": t.task_type,
+                        "Duration (min)": t.duration,
+                        "Priority (1-5)": t.priority,
+                        "Due Time": t.due_time or "--",
+                    }
+                    for t in tasks
+                ])
+
+                if st.button(f"✅ Add {len(tasks)} task(s) to {pet.name}"):
+                    for t in tasks:
+                        pet.add_task(t)
+                    save()
+                    _log.info(
+                        "Added %d AI-parsed tasks to pet '%s'", len(tasks), pet.name
+                    )
+                    st.success(f"Added {len(tasks)} task(s) to {pet.name}!")
+                    st.session_state.ai_result = None
+                    st.rerun()
+            else:
+                st.info(
+                    "No tasks could be extracted from this request. "
+                    "Try being more specific — include action words like "
+                    "'walk', 'feed', 'medication', 'groom', or 'play'."
+                )
 
 st.divider()
 

@@ -1,4 +1,61 @@
-# PawPal+ (Module 2 Project)
+# PawPal+ SafeCare AI (Phase 1)
+
+> Extended from the Module 2 PawPal+ project into an applied AI system.
+> Phase 1 adds natural-language request parsing, local knowledge retrieval,
+> and safety guardrails — all fully offline, no API key required.
+
+---
+
+## System Architecture
+
+PawPal+ SafeCare AI extends the original pet-care scheduler with an AI-assisted workflow for natural-language care planning. The user enters a free-text request through the Streamlit interface. The request first passes through safety guardrails, which block or warn about unsafe content such as toxic foods, medication dosage advice, or requests that should require veterinary attention.
+
+If the request is safe to continue, the system retrieves relevant guidance from a small local pet-care knowledge base and parses the request into structured pet-care tasks. These structured tasks are then passed to the existing PawPal scheduler, which generates the daily schedule. The final output includes the schedule, explanation, and any relevant warnings. Logging records key actions, and pytest-based tests validate the reliability of the new AI modules.
+
+![System Architecture](assets/system_architecture.png)
+
+
+## Phase 1 — What's New
+
+| Feature | File | Description |
+|---|---|---|
+| NL Task Parser | `ai_parser.py` | Converts free-text care requests into scheduled tasks |
+| Knowledge Retrieval | `knowledge_base.py` | Keyword-matches requests against 25 local pet-care entries |
+| Safety Guardrails | `guardrails.py` | Blocks toxic substances, emergencies, and dosage claims |
+| Logging | `safecare_logger.py` | Writes all AI actions and warnings to `logs/safecare.log` |
+| Knowledge Base | `data/pet_care_knowledge.json` | 25 curated pet-care guidance entries |
+
+### Phase 1 Data Flow
+
+```
+User types natural-language request
+        │
+        ▼
+ guardrails.check_safety()    ← blocks toxic foods, emergencies, vet-bypass
+        │ (if safe)
+        ▼
+ knowledge_base.retrieve_guidance()  ← keyword search over local JSON
+        │
+        ▼
+ ai_parser.parse_request()    ← regex + keyword extraction → Task objects
+        │
+        ▼
+ pawpal_system.Scheduler      ← existing scheduler (unchanged)
+        │
+        ▼
+ logs/safecare.log            ← every action and warning recorded
+```
+
+### Guardrail categories
+
+| Category | Response |
+|---|---|
+| Toxic substance (chocolate, xylitol, grapes, lily …) | Hard block — request rejected |
+| Emergency symptoms (seizure, collapse, not breathing …) | Hard block |
+| Vet-bypass language ("avoid the vet", "instead of a vet") | Hard block |
+| Specific numeric dosage ("250 mg", "2 tablets") | Soft warning — task still scheduled, vet reminder shown |
+
+---
 
 You are building **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
 
@@ -28,9 +85,24 @@ Your final app should:
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt  # only streamlit + pytest — no API keys needed
 ```
+
+### Run the app
+
+```bash
+streamlit run app.py
+```
+
+### Run all tests (original + Phase 1)
+
+```bash
+python -m pytest tests/ -v
+```
+
+The test suite covers the original PawPal+ scheduler **and** all three new
+Phase 1 modules (guardrails, knowledge base, AI parser).
 
 ### Suggested workflow
 

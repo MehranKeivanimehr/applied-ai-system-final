@@ -1,0 +1,18 @@
+flowchart TD
+    A[User enters pet-care request in Streamlit] --> B[SafeCare AI Request]
+    B --> C[Guardrails]
+    C -->|Unsafe| D[Block request / show warning]
+    C -->|Safe| E[Knowledge Base Retrieval]
+    E --> F[AI Task Parser]
+    F --> G[PawPal Scheduler]
+    G --> H[Daily Schedule + Explanation + Warnings]
+    H --> I[User reviews result]
+
+    J[Local Pet Care Knowledge Base] --> E
+    K[Logger] --> C
+    K --> E
+    K --> F
+    K --> G
+    L[Pytest Tests / Human validation] --> C
+    L --> E
+    L --> F
