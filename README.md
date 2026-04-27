@@ -1,3 +1,10 @@
+## Portfolio Artifact
+
+- **GitHub Repository:** https://github.com/MehranKeivanimehr/applied-ai-system-final
+- **Loom Video Walkthrough:**(https://www.loom.com/share/618a1d694282480586e38778af099540)
+
+This project shows my ability to extend an existing software system into a practical applied AI application. PawPal+ SafeCare AI demonstrates natural-language processing, local retrieval, safety guardrails, observable agentic workflow, deterministic backend integration, and reliability evaluation. As an AI engineer, this project reflects my focus on building AI systems that are useful, testable, reproducible, and responsible.
+
 # PawPal+ SafeCare AI
 
 > An offline AI-assisted pet-care planning system that combines natural-language
