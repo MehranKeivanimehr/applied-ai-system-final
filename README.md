@@ -128,6 +128,15 @@ Logging was added through `safecare_logger.py`, which records AI-related actions
 
 Manual evaluation was also performed using safe and unsafe pet-care requests in the Streamlit app. The system handled normal scheduling requests, blocked toxic-food requests, and warned about medication dosage language. The main limitation is that the UI workflow was manually checked rather than fully automated with browser-based tests.
 
+## Reflection and Ethics
+
+PawPal+ SafeCare AI has several limitations. The system uses a small local knowledge base, so it cannot cover every breed, medical condition, age group, allergy, or emergency scenario. Its natural-language parser is rule-based, which makes it reproducible but also limited when user requests are vague, incomplete, or phrased in unexpected ways. The system may also reflect the limits of the curated guidance included in the repository.
+
+The system could be misused if a user tried to treat it as a replacement for a veterinarian, especially for medication, emergency symptoms, or illness-related decisions. To reduce this risk, the app uses guardrails that block toxic-food requests, emergency-related language, and attempts to avoid veterinary care. Medication dosage language is treated cautiously, and the system reminds users that dosage decisions should be confirmed by a veterinarian.
+
+The most surprising part of reliability testing was that the safest design was not to make the AI more flexible, but to make it more constrained. Breaking the system into guardrails, retrieval, parsing, and deterministic scheduling made it easier to test and easier to trust. The system became more reliable because unsafe inputs were handled before they could become scheduled tasks.
+
+AI tools were used during the project for planning, debugging, test design, and implementation support. One helpful suggestion was to keep the original PawPal+ scheduler unchanged and add the AI functionality as a separate layer around it. This preserved the tested backend logic while still making the system more intelligent. One flawed suggestion was the earlier folder-structure assumption that treated the PawPal+ project as a nested repository. That would have made the final GitHub repo harder to clone and evaluate, so the structure was corrected before continuing.
 
 ## Reflection
 
