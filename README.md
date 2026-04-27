@@ -1,4 +1,4 @@
-# PawPal+ SafeCare AI (Phase 1)
+# PawPal+ SafeCare AI
 
 > Extended from the Module 2 PawPal+ project into an applied AI system.
 > Phase 1 adds natural-language request parsing, local knowledge retrieval,
@@ -116,6 +116,18 @@ The final system includes tests for the original PawPal+ scheduler and the new S
 The strongest part of the project is backend reliability. The scheduler and AI-support modules are tested separately, which makes failures easier to isolate. The main limitation is that the Streamlit UI is not deeply unit-tested, so the user-facing workflow was also checked manually through app screenshots and demo examples.
 
 This project showed that AI reliability improves when the system is decomposed into small, testable components. Guardrails, retrieval, parsing, and scheduling can each be evaluated independently instead of treating the full application as a black box.
+
+
+## Reliability and Evaluation
+
+The system was evaluated using automated tests, logging, and manual review through Streamlit demo screenshots. Automated tests cover the original PawPal+ scheduler as well as the new SafeCare AI modules: guardrails, local knowledge retrieval, and natural-language task parsing.
+
+The final test suite passed successfully with 117 out of 117 tests passing. The most important reliability checks were whether unsafe inputs were blocked, medication-related requests produced warnings, safe requests were parsed into structured tasks, and the original scheduler still worked after the AI layer was added.
+
+Logging was added through `safecare_logger.py`, which records AI-related actions and warnings in `logs/safecare.log`. This makes the system easier to inspect when a request is blocked, parsed incorrectly, or handled with a warning.
+
+Manual evaluation was also performed using safe and unsafe pet-care requests in the Streamlit app. The system handled normal scheduling requests, blocked toxic-food requests, and warned about medication dosage language. The main limitation is that the UI workflow was manually checked rather than fully automated with browser-based tests.
+
 
 ## Reflection
 
