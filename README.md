@@ -1,8 +1,8 @@
 # PawPal+ SafeCare AI
 
-> Extended from the Module 2 PawPal+ project into an applied AI system.
-> Phase 1 adds natural-language request parsing, local knowledge retrieval,
-> and safety guardrails — all fully offline, no API key required.
+> An offline AI-assisted pet-care planning system that combines natural-language
+> request parsing, local knowledge retrieval, safety guardrails, and an observable
+> agentic workflow — no API key required.
 
 ---
 
@@ -60,7 +60,7 @@ If the request is safe to continue, the system retrieves relevant guidance from 
 
 The system is organized as a layered workflow. The user interacts with the Streamlit interface, which serves as the main application entry point. The AI layer consists of three main modules: guardrails, retrieval, and natural-language task parsing. These modules transform raw user input into safe, structured scheduling tasks. The deterministic PawPal scheduler then generates the final daily plan. Reliability is supported by logging, automated tests, and user review of the produced output.
 
-## Phase 1 — What's New
+## AI System Modules
 
 | Feature | File | Description |
 |---|---|---|
@@ -70,7 +70,7 @@ The system is organized as a layered workflow. The user interacts with the Strea
 | Logging | `safecare_logger.py` | Writes all AI actions and warnings to `logs/safecare.log` |
 | Knowledge Base | `data/pet_care_knowledge.json` | 25 curated pet-care guidance entries |
 
-### Phase 1 Data Flow
+### AI Pipeline Data Flow
 
 ```
 User types natural-language request
@@ -122,7 +122,7 @@ This project showed that AI reliability improves when the system is decomposed i
 
 The system was evaluated using automated tests, logging, and manual review through Streamlit demo screenshots. Automated tests cover the original PawPal+ scheduler as well as the new SafeCare AI modules: guardrails, local knowledge retrieval, and natural-language task parsing.
 
-The final test suite passed successfully with 117 out of 117 tests passing. The most important reliability checks were whether unsafe inputs were blocked, medication-related requests produced warnings, safe requests were parsed into structured tasks, and the original scheduler still worked after the AI layer was added.
+The final test suite passed successfully with 146 out of 146 tests passing. The most important reliability checks were whether unsafe inputs were blocked, medication-related requests produced warnings, safe requests were parsed into structured tasks, and the original scheduler still worked after the AI layer was added.
 
 Logging was added through `safecare_logger.py`, which records AI-related actions and warnings in `logs/safecare.log`. This makes the system easier to inspect when a request is blocked, parsed incorrectly, or handled with a warning.
 
@@ -251,14 +251,14 @@ pip install -r requirements.txt  # only streamlit + pytest — no API keys neede
 streamlit run app.py
 ```
 
-### Run all tests (original + Phase 1)
+### Run all tests
 
 ```bash
 python -m pytest tests/ -v
 ```
 
-The test suite covers the original PawPal+ scheduler **and** all three new
-Phase 1 modules (guardrails, knowledge base, AI parser).
+The test suite covers the original PawPal+ scheduler and all AI modules
+(guardrails, knowledge base, AI parser, and agentic workflow) — 146 tests total.
 
 
 ## Smarter Scheduling
@@ -313,11 +313,16 @@ Dynamic task updates: Task attributes can be changed at runtime using update_tas
 
 ## Demo
 
-![PawPal App](pawpal_screenshot.png)
+**Safe care request — task extraction and scheduling**
 
-<a href="/course_images/ai110/pawpal_screenshot.png" target="_blank">
-  <img src='/course_images/ai110/pawpal_screenshot.png' title='PawPal App' width='' alt='PawPal App' class='center-block' />
-</a>
+![Safe request step 1](assets/app_safe_request/1.png)
+![Safe request step 2](assets/app_safe_request/2.png)
+![Safe request step 3](assets/app_safe_request/3.png)
+
+**Unsafe request — guardrail block**
+
+![Guardrail warning step 1](assets/app_guardrail_warning/1.png)
+![Guardrail warning step 2](assets/app_guardrail_warning/2.png)
 
 
 ## Optional Extensions

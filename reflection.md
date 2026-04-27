@@ -1,148 +1,129 @@
-# PawPal+ Project Reflection
+# PawPal+ SafeCare AI — Project Reflection
+
+This document covers the design, implementation, and evaluation of PawPal+ SafeCare AI, the final applied AI system extended from the Module 2 PawPal+ pet-care scheduler.
+
+---
 
 ## 1. System Design
 
-PawPal+ is designed to help a pet owner organize and plan daily pet care activities.
+**Three core actions the user should be able to perform:**
 
-Three core actions the user should be able to perform are:
+1. Describe pet-care needs in natural language and have the system extract structured care tasks automatically.
+2. Receive safety feedback — a hard block for dangerous requests (toxic foods, emergencies, vet-bypass language) and a soft warning for medication dosage language — before any task is scheduled.
+3. Review an observable AI workflow (guardrails → retrieval → parsing → scheduling) and approve parsed tasks before they are added to the daily schedule.
 
-    1-1. The user should be able to enter and manage basic owner and pet information so the system can support personalized care planning.
+**Initial design — what was planned**
 
-    1-2. The user should be able to add, edit, and organize pet care tasks such as feeding, walks, medication, grooming, and enrichment, including important details like duration and priority.
+The original Module 2 design had four classes: Owner, Pet, Task, and Scheduler. These handled deterministic scheduling, conflict detection, recurring tasks, and next-available-slot suggestions.
 
-    1-3. The user should be able to generate and review a daily care plan based on task importance, available time, and owner preferences, while also seeing why the plan was selected.
+For the final system, three AI-support layers were designed on top of the unchanged scheduler: a safety guardrails module, a local retrieval module, and a natural-language parser. An agentic orchestrator was added to make the workflow observable step-by-step in the Streamlit UI.
 
+**Design changes during implementation**
 
-**a. Initial design**
+The most significant change was adding the agentic workflow layer (`agent_workflow.py`) as a wrapper rather than integrating the AI logic directly into `app.py`. This kept the app file thin and made the full pipeline independently testable.
 
-- Briefly describe your initial UML design.
-My initial UML design for PawPal+ was kept simple and focused on the main parts of the app. I included four classes: Owner, Pet, Task, and Scheduler. The relationships were straightforward: an Owner can have multiple Pets, each Pet can have multiple Tasks, and the Scheduler works with tasks to build a daily plan.
+A second change was the retrieval enhancement. The original keyword-overlap retrieval was correct but too narrow. A risk-aware coherence boost was added using seven semantic clusters (toxic substances, medication, emergency, feeding, exercise, grooming, enrichment). If both the query and a knowledge entry share cluster tokens, the entry receives a `+0.4` score bonus, surfacing contextually relevant guidance even when raw keyword overlap is low.
 
-- What classes did you include, and what responsibilities did you assign to each?
-The Owner class was responsible for storing user information such as name, available time, preferences, and the pets they manage. The Pet class represented each pet and held basic details like name, species, age, notes, and its task list. The Task class represented individual care activities such as feeding, walks, medication, or grooming, along with details like duration, priority, due time, recurring status, and completion status. The Scheduler class was responsible for organizing tasks, checking conflicts, and generating a daily schedule based on time and priority.
+A third change was the task-splitting logic in the parser. The initial version split only on commas and semicolons, missing "and"-joined multi-task sentences like "Brush Luna's coat for 15 minutes and feed her at 7am." A recursive "and" splitter was added that only splits when both sides contain distinct task types, preserving conjunctions within a single task ("walk and run").
 
-**b. Design changes**
-
-- Did your design change during implementation?
-
-Yes, the design changed slightly after reviewing the class skeleton.
-
-- If yes, describe at least one change and why you made it.
-
-The main change was in the Scheduler class. In the initial design, Scheduler stored its own available_time and task list. After review, I changed it so that Scheduler works directly with the Owner object instead. This avoids duplicated data and makes it easier for the scheduler to access pets and their tasks when building a daily plan.
-
-I also updated Task.update_task() so it can accept changes more flexibly, and I replaced the raw task status string with a small enum to keep task states more consistent.
 ---
 
-## 2. Scheduling Logic and Tradeoffs
+## 2. AI Pipeline and Tradeoffs
 
-**a. Constraints and priorities**
+**How the pipeline works**
 
-- What constraints does your scheduler consider (for example: time, priority, preferences)?
+User input passes through six observable steps:
 
-The scheduler considers three constraints:
+1. Inspect — validates non-empty input and word count.
+2. Guardrails — hard blocks for toxic substances, emergency symptoms, and vet-bypass language; soft warning for specific numeric dosages.
+3. Retrieval — keyword + risk-aware scoring over 25 local pet-care entries; species-specific entries are preferred.
+4. Parser — regex and keyword extraction converts free text into Task objects with title, type, duration, due time, and priority.
+5. Validate — checks task types and durations for sanity.
+6. Handoff — passes structured tasks to the existing PawPal+ scheduler.
 
-Available time : generate_daily_plan() tracks time_remaining and skips any task whose duration exceeds what is left. Tasks that don't fit are dropped entirely.
-Priority : sort_tasks() sorts by priority descending before building the plan, so higher-priority tasks are considered first and are less likely to get cut by the time limit.
-Task status: only PENDING tasks are included. COMPLETE and SKIPPED tasks are filtered out before scheduling.
-due_time is used for conflict detection and chronological sorting (sort_by_time()), but does not directly gate whether a task enters the plan.
+**One design tradeoff — rule-based parsing over LLM parsing**
 
-- How did you decide which constraints mattered most?
+The parser uses regex and keyword tables rather than an LLM. This makes the system fully offline (no API key, no network), deterministic (same input always produces the same output), and fast. The tradeoff is that vague or unusual phrasing may produce no tasks. An LLM parser would handle more natural language variation but would require an API key and introduce non-determinism.
 
-Available time was treated as a hard constraint; it cannot be exceeded, so it acts as a strict cutoff. Priority was treated as the primary ordering constraint because a pet care app needs to guarantee that critical tasks (like medication) always get scheduled before optional ones (like enrichment). Status filtering was implicit. there is no reason to re-schedule work that is already done. Due time was kept as a soft constraint because not every task has a fixed start time, and forcing it as a hard gate would drop too many tasks in early use.
+**One design tradeoff — local knowledge base over live retrieval**
 
-**b. Tradeoffs**
+The knowledge base is a static local JSON file with 25 curated entries. This keeps the system reproducible and avoids the risk of retrieving unsafe or unreliable content from the internet. The tradeoff is coverage: the system cannot answer questions about breeds, conditions, or scenarios not in the knowledge base.
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
-
-Reply to both:
-
-One tradeoff in my scheduler is that I chose a lightweight conflict detection approach instead of building a full scheduling engine. The system checks whether task time windows overlap based on stored due time, duration, and date information. This keeps the code simple and readable, which is useful for a small project, but it also means the scheduler is still limited compared with a real calendar-based planning system.
-
-Another tradeoff came up during refinement. AI suggested a more Pythonic version of conflict detection using combinations instead of manual index loops. I kept the simplified version where it improved readability, but I avoided making every method as compact as possible because some shorter solutions are harder for a human reader to follow.
 ---
 
 ## 3. AI Collaboration
 
-**a. How you used AI**
+**How AI tools were used**
 
-- How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
+AI was used throughout: planning the module structure, generating initial implementations of the guardrails keyword tables and knowledge base entries, designing the test suite structure, debugging regex patterns, and improving the retrieval scoring logic.
 
-I used AI mainly for UML brainstorming, class skeleton generation, method design, test planning, debugging, and small refactors. It was most helpful when I asked focused questions about one file or one method at a time.
+The most useful prompts were narrow and specific — one module or one method at a time. Asking "how should the parser handle dosage patterns that should trigger medication type detection" produced better results than asking "how should I build the parser."
 
-- What kinds of prompts or questions were most helpful?
+**One moment where AI suggestions were not accepted as-is**
 
-The most helpful prompts were specific and technical, such as asking how Scheduler should interact with Owner, how to sort tasks by time, how to handle recurring tasks, and how to improve readability without changing behavior.
+The initial AI suggestion for the "and" splitter used a greedy approach that split on every "and" in the text. This would break phrases like "walk and run for 20 minutes" by treating them as two tasks. The final implementation adds a guard: both sides of the split must contain task keywords from different categories. This required understanding the parser's own keyword tables to write the correct guard condition.
 
-**b. Judgment and verification**
+**Verification method**
 
-- Describe one moment where you did not accept an AI suggestion as-is.
+Every AI-generated code change was verified by running `python -m pytest tests/ -v`. If tests failed, the change was examined and corrected before continuing. The evaluation harness (`evaluate_safecare.py`) was used to verify end-to-end pipeline behavior across 11 representative cases.
 
-One moment where I did not accept an AI suggestion as-is was when it proposed more compact, more Pythonic code for conflict detection. I accepted the simplification that improved readability, but I did not keep every compact version because some were harder to understand.
-
-- How did you evaluate or verify what the AI suggested?
-
-I verified AI suggestions by checking them against my current class design, running main.py, and rerunning python -m pytest. If a suggestion made the code less clear or did not match my actual logic, I changed it before using it.
 ---
 
 ## 4. Testing and Verification
 
-**a. What you tested**
+**What was tested**
 
-- What behaviors did you test?
+The test suite covers the original PawPal+ scheduler (45 tests) and all four new AI modules:
 
-I tested task completion, task addition, sorting by time, filtering by pet and status, recurring task creation, conflict detection, and daily plan generation.
+| Module | Tests | What they check |
+|---|---|---|
+| `guardrails.py` | 20 | Safe inputs, toxic foods per species, emergency symptoms, dosage warnings, vet-bypass blocks |
+| `knowledge_base.py` | 17 | Load behavior, empty queries, top-k limits, keyword matching, species filtering |
+| `ai_parser.py` | 35 | Empty input, time/duration extraction, task type detection, multi-task parsing, priority ordering |
+| `agent_workflow.py` | 29 | Return structure, safe requests, dosage warnings, blocked requests, early-stop behavior, no API key |
 
-- Why were these tests important?
+**Final test count: 146 / 146 passing.**
 
-These tests were important because they covered the core scheduling behavior and the main edge cases, such as no tasks, overlapping tasks, completed tasks, and limited available time.
+**Confidence level: 4 / 5**
 
-**b. Confidence**
+The backend logic is tested thoroughly. The main gap is the Streamlit UI, which was validated manually through app screenshots rather than automated browser tests. The parser is also limited by its rule-based design — evaluation cases with clear task keywords pass reliably, but open-ended or ambiguous phrasing may produce no tasks.
 
-- How confident are you that your scheduler works correctly?
+**Edge cases tested**
 
-My confidence level is 4/5. The backend logic is tested well, and the main scheduling features behave correctly in both the demo script and pytest suite.
-
-- What edge cases would you test next if you had more time?
-
-If I had more time, I would test more UI-related behavior, invalid user input, duplicate pets or tasks, and more date and time edge cases.
+- Empty and whitespace-only inputs blocked before reaching retrieval or parsing.
+- Dosage language ("250 mg", "1 tablet") warns but does not block.
+- Chocolate, grapes, xylitol, lily, and permethrin blocked per species.
+- "Seizing", "not breathing", and "collapse" trigger emergency hard blocks.
+- "I don't need a vet" and "instead of a vet" trigger vet-bypass hard blocks.
+- Nonsense queries return zero knowledge entries (species bonus gated on keyword score > 0).
+- Multi-task "and"-joined sentences produce the correct number of tasks.
 
 ---
 
 ## 5. Reflection
 
-**a. What went well**
+**What went well**
 
-- What part of this project are you most satisfied with?
+The layered design was the strongest part of the project. Each module — guardrails, retrieval, parser, scheduler — can be tested, debugged, and explained independently. This made the overall system easier to trust than a single monolithic AI function would have been.
 
-The part I am most satisfied with is the separation between the backend logic and the Streamlit UI. The Owner, Pet, Task, and Scheduler design stayed clean while the features became more advanced.
+Placing guardrails first in the pipeline was the most important safety decision. Unsafe requests are blocked before retrieval or parsing runs, so no unsafe content ever becomes a scheduled task.
 
-**b. What you would improve**
+**What could be improved**
 
-- If you had another iteration, what would you improve or redesign?
+The natural-language parser is the weakest component. A rule-based regex parser cannot handle all valid English phrasings of a care request. An LLM-based structured extraction call (with the same return type) could replace the parser loop body without changing the rest of the pipeline — the architecture anticipates this with a comment in `ai_parser.py` marking where the LLM hook would go.
 
-If I had another iteration, I would improve the UI more, strengthen validation, and redesign some time handling so dates and times are managed more formally instead of mostly as strings.
+The knowledge base is small and manually curated. Expanding it to cover more species, breeds, ages, and medical conditions would make the retrieval step significantly more useful.
 
-**c. Key takeaway**
+**Key takeaway**
 
-- What is one important thing you learned about designing systems or working with AI on this project?
+The most important lesson was that safety and reliability in an applied AI system come from constraints, not flexibility. Each guardrail, each validation step, and each deterministic fallback makes the system less surprising and more trustworthy. The system became more reliable not by making the AI layer more powerful, but by making it more bounded.
 
-One important thing I learned is that AI is most useful when the developer stays in control of the design. Good results came from using AI as a strong assistant, not as the architect of the whole system.
+---
 
+## 6. AI Tool Strategy
 
-## AI Strategy with VS Code Claude
+AI was most effective when given a single file and a single goal. Multi-file or multi-goal prompts produced longer responses that required more careful review. The best results came from short feedback loops: generate, test, correct, commit.
 
-VS Code Claude was most effective for method-level planning, targeted refactoring, UML updates, and test generation and find the best fix. It worked best when I gave it a narrow scope, such as one class, one method, or one bug not all the files together.
+One AI suggestion that was modified: the early folder structure for the project treated the PawPal+ module as a nested repository. This would have made cloning and evaluation harder. The structure was corrected to a flat root before implementation continued.
 
-One AI suggestion I rejected or modified was the idea of making several methods more compact just to be more Pythonic. I kept the version that was cleaner to read and easier to maintain.
-
-Using separate chat sessions for different phases helped me stay organized because each phase had a clear goal: design, implementation, UI integration, algorithms, testing, and reflection. That prevented the conversation from becoming mixed and harder to manage.
-
-The biggest lesson about being the lead architect was that I had to make the final design decisions myself. AI could generate options quickly, but I had to decide what matched the project goals, what stayed readable, and what was actually verified by code and tests.
-
-
-## Optional Extensions
-
-**a. Challenge 1: Advanced Algorithmic Capability via Agent Mode**
-**b. Challenge 2: Data Persistence with Agent Mode**
+One AI suggestion that was accepted and improved the project: keeping the original PawPal+ scheduler completely unchanged and wrapping it with AI modules rather than modifying it. This preserved the fully tested scheduler backend and let the AI layer be added and removed independently.
