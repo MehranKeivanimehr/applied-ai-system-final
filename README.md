@@ -14,6 +14,7 @@ If the request is safe to continue, the system retrieves relevant guidance from 
 
 ![System Architecture](assets/system_architecture.png)
 
+The system is organized as a layered workflow. The user interacts with the Streamlit interface, which serves as the main application entry point. The AI layer consists of three main modules: guardrails, retrieval, and natural-language task parsing. These modules transform raw user input into safe, structured scheduling tasks. The deterministic PawPal scheduler then generates the final daily plan. Reliability is supported by logging, automated tests, and user review of the produced output.
 
 ## Phase 1 — What's New
 
