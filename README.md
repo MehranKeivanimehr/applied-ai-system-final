@@ -6,6 +6,50 @@
 
 ---
 
+## Original Project
+
+This project was extended from my Module 2 project, **PawPal+**. The original PawPal+ system was a Streamlit-based pet-care scheduler that allowed an owner to add pets, define care tasks, and generate a daily schedule based on task duration, priority, and available owner time.
+
+The original system focused on deterministic scheduling logic, including priority-based planning, task filtering, recurring task handling, conflict detection, and next-available-slot suggestions. For the final applied AI system, I extended this foundation into **PawPal+ SafeCare AI**, which adds natural-language task parsing, local retrieval, safety guardrails, logging, and reliability testing.
+
+## Project Summary
+
+**PawPal+ SafeCare AI** is an offline AI-assisted pet-care planning system. It allows a user to describe pet-care needs in natural language, checks the request for safety risks, retrieves relevant guidance from a local pet-care knowledge base, converts the request into structured tasks, and then uses the existing PawPal+ scheduler to generate a daily care plan.
+
+This project matters because pet-care planning is not only a scheduling problem. Some user requests may involve unsafe foods, emergency symptoms, medication dosage claims, or attempts to avoid veterinary care. The system was therefore designed to combine useful automation with explicit safety boundaries.
+
+## Sample Interactions
+
+### Example 1: Safe care request
+
+**Input**
+
+My dog Max needs a morning walk for 30 minutes, breakfast at 8:00 AM, and playtime for 20 minutes in the evening.
+
+**Expected system behavior**
+
+The system accepts the request, retrieves dog-care guidance, parses the request into structured care tasks, and adds the tasks to the PawPal scheduler. The schedule includes walking, feeding, and playtime tasks, along with an explanation of how the tasks were selected.
+
+### Example 2: Unsafe food request
+
+**Input**
+
+Give Max chocolate as a reward tonight.
+
+**Expected system behavior**
+
+The system blocks the request because chocolate is unsafe for dogs. It displays a safety warning and does not add the task to the schedule.
+
+### Example 3: Medication dosage request
+
+**Input**
+
+Give Max 2 tablets at 9 PM.
+
+**Expected system behavior**
+
+The system shows a medication-related warning because specific dosage instructions should be confirmed by a veterinarian. Depending on the request category, the system may allow scheduling as a reminder while clearly stating that it is not providing medical dosage advice.
+
 ## System Architecture
 
 PawPal+ SafeCare AI extends the original pet-care scheduler with an AI-assisted workflow for natural-language care planning. The user enters a free-text request through the Streamlit interface. The request first passes through safety guardrails, which block or warn about unsafe content such as toxic foods, medication dosage advice, or requests that should require veterinary attention.
